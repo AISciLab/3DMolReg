@@ -27,6 +27,10 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 # 2. 安装核心依赖库
 pip install transformers wandb scikit-learn pandas numpy tqdm
 ```
+或者使用requirements.txt安装依赖库
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
@@ -163,4 +167,5 @@ Project/
 ```bibtex
 
 ```
+
 ```
