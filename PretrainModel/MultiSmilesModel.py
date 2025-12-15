@@ -8,19 +8,14 @@ warnings.simplefilter("ignore", category=FutureWarning)
 
 
 class MultiSmilesModel(RobertaPreTrainedModel):
-    """
-    多模态Smiles模型，整合了额外的分子特征数据
-    """
 
     def __init__(self, config):
         super().__init__(config)
         self.roberta = RobertaModel(config)
 
-        # AFM和ADJ特征的投影层
         self.afm_projection = nn.Linear(config.afm_dim, config.hidden_size)
         self.adj_projection = nn.Linear(config.adj_dim, config.hidden_size)
 
-        # 初始化权重并应用最终处理
         self.post_init()
 
     def forward(
@@ -53,18 +48,11 @@ class MultiSmilesModel(RobertaPreTrainedModel):
 
         text_length = text_embeds.size(1)
 
-        # 处理额外模态数据
         if afm_features is not None and adj_features is not None:
-            # 投影AFM特征
             afm_projected = self.afm_projection(afm_features)  # [batch_size, n, hidden_size]
-
-            # 投影ADJ特征
             adj_projected = self.adj_projection(adj_features)  # [batch_size, n, hidden_size]
 
-            # 相加两个特征
             knowledge_embeds = afm_projected + adj_projected  # [batch_size, n, hidden_size]
-
-            # 拼接文本和知识嵌入
             combined_embeds = torch.cat([text_embeds, knowledge_embeds], dim=1)  # [batch_size, seq_len+n, hidden_size]
 
             # 为额外的知识token创建扩展的注意力掩码
@@ -81,7 +69,6 @@ class MultiSmilesModel(RobertaPreTrainedModel):
             combined_embeds = text_embeds
             extended_attention_mask = attention_mask
 
-        # 按照RoBERTa模型的方式处理注意力掩码
         if extended_attention_mask is not None:
             extended_attention_mask = self.roberta.get_extended_attention_mask(
                 extended_attention_mask,
@@ -89,7 +76,6 @@ class MultiSmilesModel(RobertaPreTrainedModel):
                 combined_embeds.device
             )
 
-        # 通过编码器
         encoder_outputs = self.roberta.encoder(
             hidden_states=combined_embeds,
             attention_mask=extended_attention_mask,
@@ -107,8 +93,7 @@ class MultiSmilesModel(RobertaPreTrainedModel):
 
         if not return_dict:
             return outputs
-
-        # 使用命名元组返回结果
+            
         from collections import namedtuple
         MultimodalOutput = namedtuple(
             "MultimodalOutput",
@@ -124,9 +109,7 @@ class MultiSmilesModel(RobertaPreTrainedModel):
 
 
 class MultiSmilesModelForMaskedLM(RobertaPreTrainedModel):
-    """
-    MLM任务
-    """
+
     _keys_to_ignore_on_load_missing = [r"position_ids", r"lm_head.decoder.weight", r"lm_head.decoder.bias"]
     _keys_to_ignore_on_load_unexpected = [r"pooler"]
 
@@ -135,10 +118,8 @@ class MultiSmilesModelForMaskedLM(RobertaPreTrainedModel):
 
         self.roberta = MultiSmilesModel(config)
 
-        # 使用单独的LM头部
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
-        # 初始化权重并应用最终处理
         self.post_init()
 
     def get_output_embeddings(self):
@@ -181,7 +162,6 @@ class MultiSmilesModelForMaskedLM(RobertaPreTrainedModel):
         sequence_output = outputs.last_hidden_state
         text_length = outputs.text_length
 
-        # 只使用原始文本位置进行MLM
         text_sequence_output = sequence_output[:, :text_length, :]
 
         prediction_scores = self.lm_head(text_sequence_output)
@@ -206,11 +186,11 @@ class MultiSmilesModelForMaskedLM(RobertaPreTrainedModel):
         kwargs["safe_serialization"] = False
         super().save_pretrained(save_directory, **kwargs)
 
-# 扩展配置
 class MultiSmilesModelConfig(RobertaConfig):
     model_type = "multimodel-smiles"
 
     def __init__(self, afm_dim=27, adj_dim=3, **kwargs):
         super().__init__(**kwargs)
         self.afm_dim = afm_dim
+
         self.adj_dim = adj_dim
