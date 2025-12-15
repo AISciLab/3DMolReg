@@ -540,7 +540,7 @@ def TransferEvaluation(args=None):
     num_epochs = get_opt(args, "num_epochs", 150)
     learning_rate = get_opt(args, "learning_rate", 1e-4)
     weight_decay = get_opt(args, "weight_decay", 0.0001)
-    project_name = get_opt(args, "project_name", "PDTC")
+    project_name = get_opt(args, "project_name", "PDTCTransferEvaluation")
     num_runs = get_opt(args, "repeat_times", 10)
     regression_model = get_opt(args, "regression_model", None)
 
@@ -635,4 +635,5 @@ def TransferEvaluation(args=None):
 
 if __name__ == "__main__":
     TransferEvaluation(args=None)
+
 
