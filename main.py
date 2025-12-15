@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from PDXbaseline.PDXFinetune import PDXFinetune
+from finetune.CrossValidationForPDX import CrossValidationForPDX
 from finetune.TransferEvaluation import TransferEvaluation
 from finetune.CrossValidation import CrossValidation
 from PretrainModel.MultiSmilesDataset import Pretrain
@@ -58,7 +58,7 @@ def main():
     # ===============================================================
     # 任务 3: PDXFinetune
     # ===============================================================
-    p_pdx = subparsers.add_parser("pdx-fine", help="Run the PDX fine-tuning task.")
+    p_pdx = subparsers.add_parser("pdx-clas", help="Run the PDX Classification task.")
     add_common_hyperparameters(p_pdx)
 
     g_pdx = p_pdx.add_argument_group('PDX data path')
@@ -91,8 +91,8 @@ def main():
         TransferEvaluation(args)
     elif args.task == "pdtc-ten":
         CrossValidation(args)
-    elif args.task == "pdx-fine":
-        PDXFinetune(args)
+    elif args.task == "pdx-clas":
+        CrossValidationForPDX(args)
     elif args.task == "tcga":
         TCGA(args)
     elif args.task == "pretrain":
@@ -104,4 +104,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
