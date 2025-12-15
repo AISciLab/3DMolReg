@@ -1,5 +1,3 @@
-Here is the professional English translation of your README. I have refined the wording to follow standard open-source and academic documentation conventions.
-
 ***
 
 # 3DMolReg: Multimodal Drug Response Prediction
@@ -134,5 +132,6 @@ If you use this project in your research, please cite the following reference:
 ```bibtex
 
 ```
+
 
 
