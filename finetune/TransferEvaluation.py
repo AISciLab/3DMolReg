@@ -602,7 +602,7 @@ def TransferEvaluation(args=None):
             "weight_decay": weight_decay,
         })
 
-        model = Classifier(
+        model = Regressor(
             drug_model_path=model_path,
             patient_encoding_dim=512,
             num_classes=num_classes,
@@ -635,3 +635,4 @@ def TransferEvaluation(args=None):
 
 if __name__ == "__main__":
     TransferEvaluation(args=None)
+
