@@ -381,7 +381,7 @@ def CrossValidation(args=None):
     num_epochs = get_opt(args, "num_epochs", 150)
     learning_rate = get_opt(args, "learning_rate", 1e-4)
     weight_decay = get_opt(args, "weight_decay", 0.0001)
-    project_name = get_opt(args, "project_name", "PDTCTenFold")
+    project_name = get_opt(args, "project_name", "PDTCCrossValidation")
 
     regression_model = get_opt(args, "regression_model", None)
 
@@ -479,6 +479,7 @@ def CrossValidation(args=None):
 if __name__ == "__main__":
 
     CrossValidation(args=None)
+
 
 
 
