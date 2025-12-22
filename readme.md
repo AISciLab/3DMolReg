@@ -2,7 +2,11 @@
 
 # 3DMolReg: Multimodal Drug Response Prediction
 
-This project proposes a deep learning model based on multimodal SMILES sequences and patient characteristics to predict drug response.
+Identification of drug response in cancer patients by using deep learning has become the foundation of precision medicine.
+Unfortunately, patients with drug response are often scarce, limiting the performance of deep learning.
+Simultaneously, most methods use separate models for sequence or three-dimensional (3D) structures, hindering fine-grained interaction cross modalities. 
+Furthermore, the multi-scale regulatory networks in life system play the key role in patient response to drugs.
+Therefore, we propose a deep learning framework, 3DMolReg, that designs a multimodal molecular language model and patient representation learning to improve clinical drug response prediction. In the 3D structure-aware multimodal language model, molecular conformations are discretized into tokens as context and prompt knowledge for sequence masking models, enabling the fine-grained interaction cross modalities. In patient representation learning, regulatory networks at gene, protein and pathway levels are hierarchically mapped into Transformer by adaptive functions. Across multiple scenarios of drug response and disease progression prediction, 3DMolReg achieved superior performance and captured the pharmacology and biochemistry mechanisms. Importantly, the sensitive drugs predicted by 3DMolReg can improve the survival outcomes of clinical patients, further suggesting its potential in anticancer drug therapies.
 
 ## 🛠 Installation
 
@@ -132,6 +136,7 @@ If you use this project in your research, please cite the following reference:
 ```bibtex
 
 ```
+
 
 
 
